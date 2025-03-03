@@ -37,29 +37,22 @@ client = ApifyClient(load_api_token())
 
 def process_row(row):
     """Process a single row of data to create search queries"""
-    name = f"{row['Owner #1 First Name']} {row['Owner #1 Last Name']}"
-    if pd.notna(row['Owner #2 First Name']) and pd.notna(row['Owner #2 Last Name']):
-        name += f"; {row['Owner #2 First Name']} {row['Owner #2 Last Name']}"
-    
     address = f"{row['Property Address']}"
     if pd.notna(row['Property City']) and pd.notna(row['Property State']) and pd.notna(row['Property Zip']):
         address += f"; {row['Property City']}, {row['Property State']} {row['Property Zip']}"
     
     return {
-        "name": name,
         "street_citystatezip": address
     }
 
 def search_records(queries, progress_bar=None):
     """Search for records using Apify API"""
     run_input = {
-        "name": [],
         "street_citystatezip": [],
     }
     
     # Prepare input data
     for query in queries:
-        run_input["name"].append(query["name"])
         run_input["street_citystatezip"].append(query["street_citystatezip"])
     
     try:
@@ -313,13 +306,17 @@ def merge_dataset_with_file(df, dataset_results):
     
     # Process matches
     for idx, row in df.iterrows():
-        # Create search name from the row
-        search_name = f"{row['Owner #1 First Name']} {row['Owner #1 Last Name']}".lower()
+        # Create search address from the row
+        search_address = f"{row['Property Address']}".lower()
+        if pd.notna(row['Property City']) and pd.notna(row['Property State']) and pd.notna(row['Property Zip']):
+            search_address_full = f"{search_address}; {row['Property City']}, {row['Property State']} {row['Property Zip']}".lower()
+        else:
+            search_address_full = search_address
         
         # Search for matching record in dataset results
         for result in dataset_results:
-            result_name = result.get('Input Given', '').lower()
-            if search_name in result_name or result_name in search_name:
+            result_address = result.get('Input Given', '').lower()
+            if search_address in result_address or search_address_full in result_address:
                 # Extract phones with additional information
                 for j in range(1, 6):
                     phone_num = result.get(f'Phone {j}')

@@ -60,29 +60,26 @@ streamlit run app.py
 
 ### 3. Merge Dataset with File
 - Upload a file and provide a dataset ID
-- Matches records based on owner names
+- Matches records based on property addresses
 - Adds missing contact information from the dataset to your file
 - Preserves existing data and only fills in empty fields
 
 ## Input File Format
 
-For "Process New Records" and "Merge Dataset with File" modes, the application expects CSV or Excel files with the following columns:
+For "Process New Records" and "Merge Dataset with File" modes, the application expects CSV or Excel files with the following required columns:
 
-- Owner #1 First Name
-- Owner #1 Last Name
-- Owner #2 First Name
-- Owner #2 Last Name
 - Property Address
 - Property City
 - Property State
 - Property Zip
-- Additional fields (if any) will be preserved in the output
+
+Additional fields (including owner information) will be preserved in the output
 
 ## Output
 
 The application generates an Excel file containing all original data plus:
 
-- Up to 10 phone numbers (Phone 1 - Phone 10)
+- Up to 5 phone numbers (Phone 1 - Phone 5) with type, last reported date, and provider information
 - Up to 5 email addresses (Email 1 - Email 5)
 
 ## Notes
