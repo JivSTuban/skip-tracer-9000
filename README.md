@@ -28,23 +28,18 @@ This Streamlit application helps find missing contact information (phone numbers
   - Current location
   - Person verification link
 
-## Setup
+## Setup & Running
 
 1. Clone this repository
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-3. Create a `.env` file in the project root and add your Apify API token:
+3. Run the application:
+   ```bash
+   streamlit run app.py
    ```
-   APIFY_API_TOKEN=your_token_here
-   ```
-
-## Running the Application
-
-```bash
-streamlit run app.py
-```
+4. Enter your Apify API token in the sidebar (get it from [Apify Console](https://console.apify.com/account/integrations))
 
 ## Operation Modes
 
